@@ -1,4 +1,4 @@
-version: 2.1
+ version: 2.1
 
 executors:
   node-executor:
@@ -22,7 +22,7 @@ jobs:
             npm install -g sonar-scanner
             sonar-scanner \
               -Dsonar.projectKey=Eltybear \
-              -Dsonar.organization=your_organization_name \
+              -Dsonar.organization=Eltybear \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.login=$SONAR_TOKEN
 
@@ -31,3 +31,4 @@ workflows:
   build_and_test:
     jobs:
       - build
+
