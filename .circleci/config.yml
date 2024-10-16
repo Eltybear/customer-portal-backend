@@ -1,32 +1,33 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:node:.
 version: 2.1
-orbs:
-  node: circleci/node@5
+
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:latest
+
 jobs:
-  test-node:
-    # Install node dependencies and run tests
-    executor: node/default
+  build:
+    executor: node-executor
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
+      - run:
+          name: Install dependencies
+          command: npm install
       - run:
           name: Run tests
-          command: echo \"No test specified in package.json\"
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
+          command: npm test
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: SonarCloud analysis
+          command: |
+            npm install -g sonar-scanner
+            sonar-scanner \
+              -Dsonar.projectKey=Eltybear \
+              -Dsonar.organization=your_organization_name \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=$SONAR_TOKEN
+
 workflows:
-  build-and-test:
+  version: 2
+  build_and_test:
     jobs:
-      - test-node
-    # - deploy:
-    #     requires:
-    #       - test-node
+      - build
